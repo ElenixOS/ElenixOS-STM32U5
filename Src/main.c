@@ -9,7 +9,6 @@
 #include "eos_vcp.h"
 #include "eos_crown.h"
 #include "eos_fs_port_stm32u5.h"
-#include "eos_developer_options.h"
 
 #include <string.h>
 #include <stdint.h>
@@ -130,8 +129,6 @@ static uint32_t lvgl_tick_get(void)
 
 static void lcd_flush(lv_display_t *display, const lv_area_t *area, uint8_t *px_map)
 {
-    uint32_t flush_start = HAL_GetTick();
-
     /* In direct mode LVGL renders dirty areas into the active full-screen
      * buffer.  Only the final area represents a complete new frame. */
     if (lv_display_flush_is_last(display))
@@ -160,7 +157,6 @@ static void lcd_flush(lv_display_t *display, const lv_area_t *area, uint8_t *px_
     }
 
     (void)area;
-    eos_developer_options_record_flush_ms(HAL_GetTick() - flush_start);
     lv_display_flush_ready(display);
 }
 
@@ -258,7 +254,6 @@ static bool touch_init(void)
 
 static void touch_read(lv_indev_t *indev, lv_indev_data_t *data)
 {
-    uint32_t touch_start = HAL_GetTick();
     (void)indev;
     /* Keep the last valid position while the touch controller reports the
      * release state. Bubble-grid click handling compares press and release
@@ -279,8 +274,6 @@ static void touch_read(lv_indev_t *indev, lv_indev_data_t *data)
             data->state = LV_INDEV_STATE_PRESSED;
         }
     }
-
-    eos_developer_options_record_touch_ms(HAL_GetTick() - touch_start);
 }
 
 static void input_compat_init(lv_display_t *display)
@@ -387,16 +380,7 @@ int main(void)
 
     for (;;)
     {
-        static bool loop_started;
-        static uint32_t previous_loop_start;
-        uint32_t loop_start = HAL_GetTick();
         uint32_t wait_ms = eos_main_loop();
-        if (loop_started)
-        {
-            eos_developer_options_record_loop(loop_start - previous_loop_start, wait_ms);
-        }
-        loop_started = true;
-        previous_loop_start = loop_start;
         HAL_Delay(wait_ms == 0U ? 1U : wait_ms);
     }
 }
