@@ -1,0 +1,30 @@
+[submodule "third_party/CMSIS_Core"]
+	path = third_party/CMSIS_Core
+	url = https://github.com/STMicroelectronics/cmsis_core.git
+[submodule "third_party/CMSIS_Device_STM32U5xx"]
+	path = third_party/CMSIS_Device_STM32U5xx
+	url = https://github.com/STMicroelectronics/cmsis_device_u5.git
+[submodule "third_party/STM32U5xx_HAL_Driver"]
+	path = third_party/STM32U5xx_HAL_Driver
+	url = https://github.com/STMicroelectronics/stm32u5xx_hal_driver.git
+[submodule "third_party/STM32U5G9J-DK2"]
+	path = third_party/STM32U5G9J-DK2
+	url = https://github.com/STMicroelectronics/stm32u5g9j-dk2-bsp.git
+[submodule "third_party/Components/Common"]
+	path = third_party/Components/Common
+	url = https://github.com/STMicroelectronics/common.git
+[submodule "third_party/Components/rk050hr18"]
+	path = third_party/Components/rk050hr18
+	url = https://github.com/STMicroelectronics/stm32-rk050hr18.git
+[submodule "third_party/ElenixOS"]
+	path = third_party/ElenixOS
+	url = https://github.com/ElenixOS/ElenixOS.git
+[submodule "third_party/lvgl"]
+	path = third_party/lvgl
+	url = https://github.com/lvgl/lvgl.git
+[submodule "third_party/littlefs"]
+	path = third_party/littlefs
+	url = https://github.com/littlefs-project/littlefs.git
+[submodule "third_party/Components/mx66uw1g45g"]
+	path = third_party/Components/mx66uw1g45g
+	url = https://github.com/STMicroelectronics/stm32-mx66uw1g45g.git

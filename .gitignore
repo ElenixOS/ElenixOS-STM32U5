@@ -1,0 +1,39 @@
+# Build output and CMake/Ninja state
+/build/
+/cmake-build-*/
+**/Debug/
+**/Release/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+build.ninja
+.ninja_deps
+.ninja_log
+
+# Embedded build products and compiler by-products
+*.elf
+*.hex
+*.bin
+*.map
+*.o
+*.obj
+*.a
+*.d
+*.su
+
+# IDE and tool caches
+.cache/
+mx.scratch/
+
+# Temporary files and logs
+/tmp/
+/.tmp/
+*.log
+
+# OS/editor clutter
+.DS_Store
+Thumbs.db
+__MACOSX/
+*.swp
+*~

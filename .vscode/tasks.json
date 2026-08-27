@@ -1,0 +1,130 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Stop stale ST-LINK GDB server",
+            "type": "shell",
+            "command": "for pid in $(lsof -tiTCP:61234 -sTCP:LISTEN 2>/dev/null); do kill -TERM \"$pid\" 2>/dev/null || true; sleep 0.2; kill -0 \"$pid\" 2>/dev/null && kill -KILL \"$pid\" 2>/dev/null || true; done",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never",
+                "panel": "shared",
+                "clear": false
+            }
+        },
+        {
+            "label": "Prepare ElenixOS STM32U5 Debug",
+            "type": "shell",
+            "command": "true",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "Build ElenixOS STM32U5"
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "clear": false
+            }
+        },
+        {
+            "label": "Start ST-Link VCP log monitor",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/tools/vcp_monitor.py",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "runOptions": {
+                "runOn": "folderOpen",
+                "instanceLimit": 1
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "stlink-vcp-monitor",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^ST-Link VCP monitor started$"
+                }
+            },
+            "presentation": {
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "clear": false
+            }
+        },
+        {
+            "label": "Stop ST-Link VCP log monitor",
+            "type": "shell",
+            "command": "python3 ${workspaceFolder}/tools/vcp_monitor.py --stop",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated",
+                "clear": false
+            }
+        },
+        {
+            "label": "Stop ElenixOS Debug Helpers",
+            "dependsOn": [
+                "Stop stale ST-LINK GDB server"
+            ],
+            "dependsOrder": "parallel",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never",
+                "panel": "shared",
+                "clear": false
+            }
+        },
+        {
+            "label": "Configure ElenixOS STM32U5 Debug",
+            "type": "shell",
+            "command": "cmake -S ${workspaceFolder} -B ${workspaceFolder}/build -DCMAKE_BUILD_TYPE=Debug",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "clear": false
+            }
+        },
+        {
+            "label": "Build ElenixOS STM32U5",
+            "type": "shell",
+            "command": "cmake --build ${workspaceFolder}/build --parallel 4",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": "Configure ElenixOS STM32U5 Debug",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "clear": false
+            }
+        }
+    ]
+}

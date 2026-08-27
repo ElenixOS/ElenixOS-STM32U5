@@ -1,0 +1,11 @@
+{
+  "board": "STM32U5G9J-DK2",
+  "device": "STM32U5G9ZJT6Q",
+  "core": "Cortex-M33",
+  "order": 0,
+  "tz": "TZ-disabled",
+  "toolchain": "GCC",
+  "source": {
+    "sourceType": "Empty"
+  }
+}
