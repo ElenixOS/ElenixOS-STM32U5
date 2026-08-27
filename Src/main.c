@@ -189,10 +189,19 @@ static lv_point_t last_touch_point;
 
 #define USER_BUTTON_LONG_PRESS_MS 800U
 #define USER_BUTTON_DEBOUNCE_MS    30U
+#define USER_BUTTON_ACTIVE_LEVEL   GPIO_PIN_SET
 
 static volatile bool user_button_pressed;
 static volatile uint32_t user_button_pressed_at;
 static volatile uint32_t user_button_last_edge;
+
+/* The DK2 USER button is pulled down and drives PC13 high when pressed.
+ * Keep the electrical active level in the board port instead of changing the
+ * generic BUTTON_PRESSED/BUTTON_RELEASED macros in the BSP submodule. */
+static bool user_button_is_pressed(void)
+{
+    return HAL_GPIO_ReadPin(BUTTON_USER_GPIO_PORT, BUTTON_USER_PIN) == USER_BUTTON_ACTIVE_LEVEL;
+}
 
 /* Called by the official BSP from the EXTI13 ISR. Do not touch LVGL here;
  * eos_crown_button_report() only queues a small dispatcher item, which is
@@ -211,7 +220,7 @@ void BSP_PB_Callback(Button_TypeDef button)
     }
     user_button_last_edge = now;
 
-    if (BSP_PB_GetState(BUTTON_USER) == BUTTON_PRESSED)
+    if (user_button_is_pressed())
     {
         user_button_pressed = true;
         user_button_pressed_at = now;
